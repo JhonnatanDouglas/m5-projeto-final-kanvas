@@ -187,7 +187,7 @@ Corpo da Requisição (JSON):
 {
 	"students_courses": [
 		{
-			"student_email": "anie@kenzie.com.br"
+			"student_email": "annie@kenzie.com.br"
 		}
 	]
 }
