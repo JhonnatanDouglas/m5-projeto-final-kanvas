@@ -1,85 +1,84 @@
 
-# Kanvas - API de Gerenciamento de Cursos EAD
+# Kanvas - EAD Course Management API
 
-## Descrição do Projeto 
+## Project Description
 
-O projeto Kanvas é uma API REST desenvolvida em Python com o framework Django e Django Rest Framework (DRF) para o gerenciamento de cursos e aulas em uma escola de modalidade EAD. Esta API permite a criação de usuários, cursos, conteúdos de cursos e a associação de alunos aos cursos. Ela oferece autenticação baseada em JSON Web Token (JWT) e inclui documentação Swagger para facilitar o uso e teste.
+The Kanvas project is a REST API developed in Python with the Django framework and Django Rest Framework (DRF) for managing courses and classes in an EAD (distance learning) school. This API allows for the creation of users, courses, course content, and the association of students with courses. It offers authentication based on JSON Web Tokens (JWT) and includes Swagger documentation to facilitate usage and testing.
 
-## Índice
+## Table of Contents
 
-- [Visão Geral](#visão-geral)
-- [Descrição do Projeto](#descrição-do-projeto)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Configuração dos Relacionamentos](#configuração-dos-relacionamentos)
-- [Rotas](#rotas)
-  - [POST /api/accounts/](#rota-post-apiaccounts)
-  - [POST /api/login/](#rota-post-apilogin)
-  - [POST /api/courses/](#rota-post-apicourses)
-  - [GET /api/courses/](#rota-get-apicourses)
-  - [GET /api/courses/<course_id>/](#rota-get-apicoursescourse_id)
-  - [PATCH /api/courses/<course_id>/](#rota-patch-apicoursescourse_id)
-  - [DELETE /api/courses/<course_id>/](#rota-delete-apicoursescourse_id)
-  - [POST /api/courses/<course_id>/contents/](#rota-post-apicoursescourse_idcontents)
-  - [GET /api/courses/<course_id>/contents/<content_id>/](#rota-get-apicoursescourse_idcontentscontent_id)
-  - [PATCH /api/courses/<course_id>/contents/<content_id>/](#rota-patch-apicoursescourse_idcontentscontent_id)
-  - [DELETE /api/courses/<course_id>/contents/<content_id>/](#rota-delete-apicoursescourse_idcontentscontent_id)
-  - [PUT /api/courses/<course_id>/students/](#rota-put-apicoursescourse_idstudents)
-  - [GET /api/courses/<course_id>/students/](#rota-get-apicoursescourse_idstudents)
-  - [GET /api/docs/](#rota-get-apidocs)
+- [Overview](#overview)
+- [Project Description](#project-description)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Relationship Setup](#relationship-setup)
+- [Routes](#routes)
+  - [POST /api/accounts/](#post-apicourses)
+  - [POST /api/login/](#post-apilogin)
+  - [POST /api/courses/](#post-apicourses)
+  - [GET /api/courses/](#get-apicourses)
+  - [GET /api/courses/<course_id>/](#get-apicoursescourse_id)
+  - [PATCH /api/courses/<course_id>/](#patch-apicoursescourse_id)
+  - [DELETE /api/courses/<course_id>/](#delete-apicoursescourse_id)
+  - [POST /api/courses/<course_id>/contents/](#post-apicoursescourse_idcontents)
+  - [GET /api/courses/<course_id>/contents/<content_id>/](#get-apicoursescourse_idcontentscontent_id)
+  - [PATCH /api/courses/<course_id>/contents/<content_id>/](#patch-apicoursescourse_idcontentscontent_id)
+  - [DELETE /api/courses/<course_id>/contents/<content_id>/](#delete-apicoursescourse_idcontentscontent_id)
+  - [PUT /api/courses/<course_id>/students/](#put-apicoursescourse_idstudents)
+  - [GET /api/courses/<course_id>/students/](#get-apicoursescourse_idstudents)
+  - [GET /api/docs/](#get-apidocs)
 
-
-#### Diagrama do Projeto
+#### Project Diagram
 
 ![Kanvas ER Diagram](https://imgur.com/6ovallL.png)
 
-## Tecnologias Utilizadas
+## Technologies Used
 
 - Python 3.11.5
 - Django 4.2.6
 - Django Rest Framework (DRF) 3.14.0
-- PostgreSQL (Banco de Dados)
-- drf-spectacular 0.26.5 (Documentação)
-- Gunicorn 21.2.0 (Servidor Web)
-- Outras bibliotecas listadas em `requirements.txt`
+- PostgreSQL (Database)
+- drf-spectacular 0.26.5 (Documentation)
+- Gunicorn 21.2.0 (Web Server)
+- Other libraries listed in `requirements.txt`
 
-## Estrutura do Projeto
+## Project Structure
 
-O projeto segue uma estrutura de pasta comum do Django, com o aplicativo principal nomeado como `_core`. Os aplicativos relacionados ao DER foram nomeados de acordo com as especificações:
+The project follows a common Django folder structure, with the main app named `_core`. The apps related to the ERD are named according to the specifications:
 
-- `accounts`: Gerenciamento de usuários.
-- `courses`: Gerenciamento de cursos.
-- `contents`: Gerenciamento de conteúdos de cursos.
-- `students_courses`: Gerenciamento da associação de alunos aos cursos.
+- `accounts`: User management.
+- `courses`: Course management.
+- `contents`: Course content management.
+- `students_courses`: Management of student-course associations.
 
-## Configuração dos Relacionamentos
+## Relationship Setup
 
-O projeto segue as regras de relacionamento definidas no DER:
+The project follows the relationship rules defined in the ERD:
 
-- Relacionamento 1:N entre `Account` e `Course` com atributo `instructor`.
-- Relacionamento 1:N entre `Course` e `Content` com atributo `course`.
-- Relacionamento N:N entre `Account` e `Course` com tabela pivô customizada. A chave estrangeira referente a `Account` na tabela pivô é chamada de `student` e a referente a `Course` é chamada de `course`.
+- 1:N relationship between `Account` and `Course` with the `instructor` attribute.
+- 1:N relationship between `Course` and `Content` with the `course` attribute.
+- N:N relationship between `Account` and `Course` with a custom pivot table. The foreign key referencing `Account` in the pivot table is called `student`, and the one referencing `Course` is called `course`.
 
-## Rotas
+## Routes
 
-Aqui estão algumas das principais rotas da API:
+Here are some of the main routes of the API:
 
-### Rota: `POST /api/accounts/`
+### Route: `POST /api/accounts/`
 
-**Criação de usuário (estudantes ou super usuários)**
+**Create user (students or super users)**
 
-Corpo da Requisição (JSON):
+Request Body (JSON):
 
 ```json
 {
 	"username": "annie",
 	"password": "1234",
 	"email": "annie@kenzie.com.br",
-	"is_superuser": true // Opcional
+	"is_superuser": true // Optional
 }
 ```
 
-Resposta (JSON) - Status Code 201 (Created):
+Response (JSON) - Status Code 201 (Created):
 
 ```json
 {
@@ -90,26 +89,26 @@ Resposta (JSON) - Status Code 201 (Created):
 }
 ```
 
-### Rota: `POST /api/login/`
+### Route: `POST /api/login/`
 
-**Login do usuário**
+**User login**
 
-### Rota: `POST /api/courses/`
+### Route: `POST /api/courses/`
 
-**Criação de cursos**
+**Create courses**
 
-Corpo da Requisição (JSON):
+Request Body (JSON):
 
 ```json
 {
 	"name": "Python",
 	"start_date": "2023-08-28",
 	"end_date": "2023-10-28",
-	"instructor": "f6b0bc63-5bf2-4304-943e-a630cf65c895"  // opcional
+	"instructor": "f6b0bc63-5bf2-4304-943e-a630cf65c895"  // optional
 }
 ```
 
-Resposta (JSON) - Status Code 201 (Created):
+Response (JSON) - Status Code 201 (Created):
 
 ```json
 {
@@ -124,64 +123,64 @@ Resposta (JSON) - Status Code 201 (Created):
 }
 ```
 
-### Rota: `GET /api/courses/`
+### Route: `GET /api/courses/`
 
-**Listagem de cursos**
+**List courses**
 
-### Rota: `GET /api/courses/<course_id>/`
+### Route: `GET /api/courses/<course_id>/`
 
-**Busca de curso por id**
+**Search course by ID**
 
-### Rota: `PATCH /api/courses/<course_id>/`
+### Route: `PATCH /api/courses/<course_id>/`
 
-**Atualização somente dos dados de curso**
+**Update course data**
 
-### Rota: `DELETE /api/courses/<course_id>/`
+### Route: `DELETE /api/courses/<course_id>/`
 
-**Deleção de curso**
+**Delete course**
 
-### Rota: `POST /api/courses/<course_id>/contents/`
+### Route: `POST /api/courses/<course_id>/contents/`
 
-**Criação de conteúdos e associação ao curso**
+**Create content and associate it with the course**
 
-Corpo da Requisição (JSON):
+Request Body (JSON):
 
 ```json
 {
-	"name": "Aula - Sintaxe, Variáveis e Tipos",
-	"content": "Python é uma linguagem totalmente orientada a objetos. Tudo em Python é um objeto...",
-	"video_url": "https://vimeo.com/846236812/71bf004be0?share=copy" // opcional
+	"name": "Lesson - Syntax, Variables and Types",
+	"content": "Python is a fully object-oriented language. Everything in Python is an object...",
+	"video_url": "https://vimeo.com/846236812/71bf004be0?share=copy" // optional
 }
 ```
 
-Resposta (JSON) - Status Code 201 (Created):
+Response (JSON) - Status Code 201 (Created):
 
 ```json
 {
 	"id": "5aef6df3-3085-43d5-8205-eb12cda45b9e",
-	"name": "Aula - Sintaxe, Variáveis e Tipos",
-	"content": "Python é uma linguagem totalmente orientada a objetos...",
+	"name": "Lesson - Syntax, Variables and Types",
+	"content": "Python is a fully object-oriented language...",
 	"video_url": "https://vimeo.com/846236812/71bf004be0?share=copy"
 }
 ```
 
-### Rota: `GET /api/courses/<course_id>/contents/<content_id>/`
+### Route: `GET /api/courses/<course_id>/contents/<content_id>/`
 
-**Busca de conteúdo por id**
+**Search content by ID**
 
-### Rota: `PATCH /api/courses/<course_id>/contents/<content_id>/`
+### Route: `PATCH /api/courses/<course_id>/contents/<content_id>/`
 
-**Atualização somente do conteúdo**
+**Update content data**
 
-### Rota: `DELETE /api/courses/<course_id>/contents/<content_id>/`
+### Route: `DELETE /api/courses/<course_id>/contents/<content_id>/`
 
-**Deleção de conteúdos**
+**Delete content**
 
-### Rota: `PUT /api/courses/<course_id>/students/`
+### Route: `PUT /api/courses/<course_id>/students/`
 
-**Adição de alunos ao curso**
+**Add students to the course**
 
-Corpo da Requisição (JSON):
+Request Body (JSON):
 
 ```json
 {
@@ -193,7 +192,7 @@ Corpo da Requisição (JSON):
 }
 ```
 
-Resposta (JSON) - Status Code 200 (Ok):
+Response (JSON) - Status Code 200 (Ok):
 
 ```json
 {
@@ -211,10 +210,10 @@ Resposta (JSON) - Status Code 200 (Ok):
 }
 ```
 
-### Rota: `GET /api/courses/<course_id>/students/`
+### Route: `GET /api/courses/<course_id>/students/`
 
-**Listagem dos estudantes do curso**
+**List students in the course**
 
-### Rota: `GET /api/docs/`
+### Route: `GET /api/docs/`
 
-**Visualização da documentação no formato Swagger ou Redoc**
+**View Swagger or Redoc documentation**
